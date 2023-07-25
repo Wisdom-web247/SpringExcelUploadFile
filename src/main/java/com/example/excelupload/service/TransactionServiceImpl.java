@@ -28,6 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public List<Transactions> getTransactionsFromExcel(MultipartFile files) throws IOException {
 
         List<Transactions> transactionsList = new ArrayList<>();
@@ -44,14 +45,16 @@ public class TransactionServiceImpl implements TransactionService {
                 XSSFRow row = worksheet.getRow(i);
 
                 //Get index value of the cell
-                Integer id = (int) row.getCell(0).getNumericCellValue();
-                Double amount = row.getCell(2).getNumericCellValue();
+                //
+                //  Integer id = (int) row.getCell(0).getNumericCellValue();
+            //    Double amount = row.getCell(2).getNumericCellValue();
 
-                 transactions.setTransactionDate(row.getCell(0).getDateCellValue());
-                 transactions.setDescription(row.getCell(1).getStringCellValue());
-                transactions.setAmount(row.getCell(2).getNumericCellValue());
-                 transactions.setTransactionType(row.getCell(3).getStringCellValue());
-                 transactions.setMonthlyBalance(row.getCell(4).getNumericCellValue());
+                transactions.setId((long) row.getCell(0).getNumericCellValue());
+                 transactions.setTransactionDate(row.getCell(1).getDateCellValue());
+                 transactions.setDescription(row.getCell(2).getStringCellValue());
+                 transactions.setAmount(row.getCell(3).getNumericCellValue());
+                 transactions.setTransactionType(row.getCell(4).getStringCellValue());
+                 transactions.setMonthlyBalance(row.getCell(5).getNumericCellValue());
 
                  //Compile the list of transactions to display
                  transactionsList.add(transactions);
